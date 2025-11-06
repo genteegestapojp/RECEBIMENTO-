@@ -390,9 +390,43 @@ window.GG = {
 
     atualizarResumo() {
         console.log('Carregando resumo...');
-        // Lógica para preencher os 6 cards (IDs: agendaCount, recebidosCount, etc.)
-        // Ex: document.getElementById('agendaCount').textContent = this.dados.agendamentos.length;
-        this.mostrarAlerta('View Resumo carregada. Lógica de contagem pendente.', 'info');
+        try {
+            const hoje = new Date().toISOString().split('T')[0];
+
+            // LÓGICA DE EXEMPLO (ASSUMINDO NOMES DE COLUNAS)
+            // Filtra agendamentos de hoje (assumindo que 'data' é a coluna)
+            const agendaHoje = this.dados.agendamentos.filter(a => a.data && a.data.startsWith(hoje));
+            // Filtra recebimentos de hoje (assumindo 'created_at' ou 'data_recebimento')
+            const recebidosHoje = this.dados.recebimentos.filter(r => r.created_at && r.created_at.startsWith(hoje));
+            
+            // Calcula o valor total recebido hoje
+            const valorHoje = recebidosHoje.reduce((acc, r) => {
+                const valor = parseFloat(r.valor_cobrado) || 0;
+                return acc + valor;
+            }, 0);
+
+            // Lógica de Recusa (Exemplo: se houver uma coluna 'status')
+            const recusaHoje = recebidosHoje.filter(r => r.status === 'recusado').length;
+
+            // Lógica de Backlog (Exemplo: agendado para hoje mas ainda 'pendente')
+            const backlogHoje = agendaHoje.filter(a => a.status === 'pendente').length;
+            
+            // Lógica de No Show (Exemplo: Agendados - Recebidos - Recusados - Pendentes)
+            const noShowHoje = Math.max(0, agendaHoje.length - recebidosHoje.length - backlogHoje);
+
+            // ATUALIZA A TELA (HTML)
+            document.getElementById('resumoAgenda').textContent = agendaHoje.length;
+            document.getElementById('resumoRecebidos').textContent = recebidosHoje.length;
+            document.getElementById('resumoValor').textContent = valorHoje.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('resumoBacklog').textContent = backlogHoje;
+            document.getElementById('resumoRecusa').textContent = recusaHoje;
+            document.getElementById('resumoNoShow').textContent = noShowHoje;
+
+            // this.mostrarAlerta('Resumo atualizado com dados do banco.', 'success');
+        } catch(e) {
+            console.error("Erro ao atualizar resumo:", e);
+            this.mostrarAlerta(`Falha ao calcular o resumo: ${e.message}`, 'error');
+        }
     },
     
     inicializarAgendamento() {
@@ -484,7 +518,7 @@ window.GG = {
         
         // Renderiza tabelas das novas abas
         this.renderizarTabelaDescarga();
-        this.renderizarTabelaPix();
+        this.renderizarTabelaPix(); // <-- Função agora implementada
         
         // Popula dropdowns (ex: filiais no form de PIX)
         // this.popularDropdownsConfig(); // (Nova função necessária)
@@ -534,31 +568,121 @@ window.GG = {
         // Lógica para abrir o 'editModal' genérico e preencher com dados
     },
 
-    // Funções de Chaves PIX (Stubs)
+    // Funções de Chaves PIX (IMPLEMENTADAS)
     renderizarTabelaPix() {
-        const tbody = document.querySelector('#tabela-pix tbody');
+        const tbody = document.getElementById('tabela-pix-tbody');
         if (!tbody) return;
-        // Mock data já está no HTML.
-        // Lógica para limpar o tbody e preencher com this.dados.chavesPix
-        console.log('Renderização da tabela de PIX pendente.');
+        
+        tbody.innerHTML = ''; // Limpa o loading
+        
+        if (!this.dados.chavesPix || this.dados.chavesPix.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">Nenhuma chave PIX cadastrada.</td></tr>';
+            return;
+        }
+
+        this.dados.chavesPix.forEach(pix => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${this.escapeHTML(pix.cd_filial)}</td>
+                <td>${this.escapeHTML(pix.tipo_chave)}</td>
+                <td>${this.escapeHTML(pix.chave_pix)}</td>
+                <td class="actions">
+                    <button class="btn btn-sm btn-warning" onclick="window.GG.editarChavePix(${pix.id})">
+                        <i data-feather="edit-2" class="h-4 w-4"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="window.GG.excluirChavePix(${pix.id})">
+                        <i data-feather="trash-2" class="h-4 w-4"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+        
+        feather.replace();
     },
 
     async salvarChavePix() {
         this.mostrarLoading(true);
-        // Lógica para pegar dados do 'form-add-pix'
-        this.mostrarAlerta('Função salvarChavePix não implementada.', 'info');
-        this.mostrarLoading(false);
+        const editId = document.getElementById('edit-pix-id').value;
+        
+        const payload = {
+            cd_filial: document.getElementById('add-pix-filial').value,
+            tipo_chave: document.getElementById('add-pix-tipo').value,
+            chave_pix: document.getElementById('add-pix-chave').value
+        };
+
+        try {
+            if (editId) {
+                // ATUALIZAR (PATCH)
+                const result = await this.supabaseRequest(`chaves_pix?id=eq.${editId}`, 'PATCH', payload);
+                // Atualiza o dado local
+                const index = this.dados.chavesPix.findIndex(p => p.id == editId);
+                if (index > -1 && result && result[0]) {
+                    this.dados.chavesPix[index] = result[0];
+                }
+                this.mostrarAlerta('Chave PIX atualizada com sucesso!', 'success');
+            } else {
+                // CRIAR (POST)
+                const result = await this.supabaseRequest('chaves_pix', 'POST', payload);
+                // Adiciona o dado local
+                if (result && result[0]) {
+                    this.dados.chavesPix.push(result[0]);
+                }
+                this.mostrarAlerta('Chave PIX salva com sucesso!', 'success');
+            }
+            
+            this.limparFormPix();
+            this.renderizarTabelaPix();
+
+        } catch (e) {
+            console.error("Erro ao salvar chave PIX:", e);
+            this.mostrarAlerta(`Erro ao salvar chave PIX: ${e.message}`, 'error');
+        } finally {
+            this.mostrarLoading(false);
+        }
     },
     
     limparFormPix() {
         document.getElementById('form-add-pix').reset();
+        document.getElementById('edit-pix-id').value = ''; // Limpa o ID de edição
+    },
+
+    editarChavePix(id) {
+        const pix = this.dados.chavesPix.find(p => p.id == id);
+        if (!pix) {
+            this.mostrarAlerta('Erro: Chave PIX não encontrada localmente.', 'error');
+            return;
+        }
+
+        // Preenche o formulário
+        document.getElementById('edit-pix-id').value = pix.id;
+        document.getElementById('add-pix-filial').value = pix.cd_filial;
+        document.getElementById('add-pix-tipo').value = pix.tipo_chave;
+        document.getElementById('add-pix-chave').value = pix.chave_pix;
+        
+        // Rola a tela para o topo do formulário
+        document.getElementById('form-add-pix').scrollIntoView({ behavior: 'smooth' });
     },
 
     async excluirChavePix(id) {
-        if (!confirm('Tem certeza que deseja excluir esta chave PIX?')) return;
+        if (!confirm('Tem certeza que deseja excluir esta chave PIX? Esta ação não pode ser desfeita.')) return;
+        
         this.mostrarLoading(true);
-        this.mostrarAlerta(`Função excluirChavePix(id: ${id}) não implementada.`, 'info');
-        this.mostrarLoading(false);
+        try {
+            await this.supabaseRequest(`chaves_pix?id=eq.${id}`, 'DELETE');
+            
+            // Remove do array local
+            this.dados.chavesPix = this.dados.chavesPix.filter(p => p.id != id);
+            
+            this.renderizarTabelaPix();
+            this.mostrarAlerta('Chave PIX excluída com sucesso!', 'success');
+
+        } catch (e) {
+            console.error("Erro ao excluir chave PIX:", e);
+            this.mostrarAlerta(`Erro ao excluir chave PIX: ${e.message}`, 'error');
+        } finally {
+            this.mostrarLoading(false);
+        }
     },
 
 
