@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Descarga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        .tabela-container {
+            width: 100%;
+            max-width: 1024px;
+            margin: 2rem auto;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+        .tabela-header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .tabela-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: #00D4AA; /* Cor do sistema G&G */
+        }
+        .tabela-body {
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.75rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        /* Cabeçalho da tabela */
+        thead th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        /* Grupos de Serviço */
+        .group-header td {
+            background-color: #f9fafb;
+            font-weight: 700;
+            color: #111827;
+            border-top: 2px solid #d1d5db;
+        }
+        .group-subheader {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+            display: block;
+        }
+        /* Linhas de Serviço */
+        .service-row td:nth-child(1) {
+            padding-left: 2.5rem; /* Indentação */
+        }
+        .service-row td:nth-child(2) {
+            font-weight: 600;
+        }
+        .tabela-footer {
+            background-color: #333;
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        /* Controles de Impressão */
+        #print-controls {
+            max-width: 1024px;
+            margin: 1rem auto 0;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-print {
+            background-color: #0077B6; /* Cor do sistema G&G */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-print:hover {
+            background-color: #023047;
+        }
+        #filial-select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            #print-controls {
+                display: none;
+            }
+            .tabela-container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            /* Garante que as cores de fundo sejam impressas */
+            .tabela-header, .tabela-footer, thead th, .group-header td {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div id="print-controls">
+        <div>
+            <label for="filial-select" class="text-sm font-medium">Selecionar Filial (para Chave PIX):</label>
+            <select id="filial-select" onchange="renderTabela()">
+                <option value="">Carregando...</option>
+            </select>
+        </div>
+        <button class="btn-print" onclick="window.print()">Imprimir Tabela</button>
+    </div>
+
+    <div class="tabela-container" id="tabela-container">
+        <div class="tabela-header">
+            <span class="logo">Perlog</span>
+            <h1>TABELA DE DESCARGA</h1>
+        </div>
+        <div class="tabela-body">
+            <table id="tabela-precos">
+                <thead>
+                    <tr>
+                        <th>Tipo de Serviço</th>
+                        <th>Valor (Unidade)</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-tbody">
+                    <!-- Conteúdo será gerado por JS -->
+                    <tr><td colspan="4" class="text-center p-8">Carregando dados...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tabela-footer" id="tabela-footer">
+            CHAVE PIX: (Selecione uma filial)
+        </div>
+    </div>
+
+    <script>
+        // Configuração do Supabase (use as mesmas do seu app)
+        const SUPABASE_URL = 'https://xizamzncvtacaunhmsrv.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpemFtem5jdnRhY2F1bmhtc3J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4NTM3MTQsImV4cCI6MjA3NzQyOTcxNH0.tNZhQiPlpQCeFTKyahFOq_q-5i3_94AHpmIjYYrnTc8';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let dadosValores = [];
+        let dadosFiliais = [];
+
+        // Busca os dados ao carregar a página
+        async function carregarDados() {
+            try {
+                const { data: valores, error: vError } = await supabase
+                    .from('valores_descarga') // ATENÇÃO: Tabela 'valores_descarga'
+                    .select('*')
+                    .order('tipo_servico', { ascending: true });
+                
+                if (vError) throw vError;
+                dadosValores = valores;
+
+                const { data: filiais, error: fError } = await supabase
+                    .from('filiais') // ATENÇÃO: Tabela 'filiais'
+                    .select('*')
+                    .order('nome', { ascending: true });
+                
+                if (fError) throw fError;
+                dadosFiliais = filiais;
+
+                popularDropdownFiliais();
+                renderTabela();
+
+            } catch (error) {
+                document.getElementById('tabela-tbody').innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-600">Erro ao carregar dados: ${error.message}</td></tr>`;
+            }
+        }
+
+        function popularDropdownFiliais() {
+            const select = document.getElementById('filial-select');
+            select.innerHTML = '<option value="">Selecione a Filial</option>';
+            dadosFiliais.forEach(f => {
+                select.innerHTML += `<option value="${f.id}">${f.nome}</option>`;
+            });
+        }
+
+        // Renderiza a tabela baseada nos dados
+        function renderTabela() {
+            const tbody = document.getElementById('tabela-tbody');
+            tbody.innerHTML = '';
+            
+            if (dadosValores.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-8">Nenhum valor cadastrado.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            let currentGroup = '';
+
+            dadosValores.forEach(val => {
+                const tipoServico = val.tipo_servico || 'GERAL';
+                
+                // Adiciona cabeçalho de grupo
+                if (tipoServico !== currentGroup) {
+                    currentGroup = tipoServico;
+                    html += `
+                        <tr class="group-header">
+                            <td colspan="4">
+                                ${tipoServico}
+                                <span class="group-subheader">${getSubheader(tipoServico)}</span>
+                            </td>
+                        </tr>`;
+                }
+                
+                // Adiciona linha de serviço
+                const valorFmt = (parseFloat(val.valor) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                html += `
+                    <tr class="service-row">
+                        <td>${val.descricao}</td>
+                        <td>${valorFmt}</td>
+                        <td>-</td> <!-- Quantidade -->
+                        <td>-</td> <!-- Valor Total -->
+                    </tr>`;
+            });
+            
+            html += `
+                <tr class="font-bold">
+                    <td colspan="3" class="text-right">TOTAL</td>
+                    <td>R$ -</td>
+                </tr>
+            `;
+
+            tbody.innerHTML = html;
+            
+            // Atualiza rodapé com PIX
+            const filialId = document.getElementById('filial-select').value;
+            const footer = document.getElementById('tabela-footer');
+            if (filialId) {
+                const filial = dadosFiliais.find(f => f.id == filialId);
+                const nomeFilial = filial.nome.split(' - ')[0] || filial.nome;
+                footer.textContent = `CHAVE PIX (${nomeFilial}): ${filial.chave_pix || 'Não definida'}`;
+            } else {
+                footer.textContent = 'CHAVE PIX: (Selecione uma filial)';
+            }
+        }
+        
+        // Função auxiliar para subheaders (baseado na imagem)
+        function getSubheader(grupo) {
+            if (grupo.includes('PALETIZADA')) return '01 PRODUTO POR PALLET';
+            if (grupo.includes('RETRABALHADA')) return 'SUPERIOR 01 PRODUTO POR PALLET';
+            if (grupo.includes('ESTIVADA') && grupo.includes('MAIORES')) return 'VEÍCULOS MAIORES';
+            if (grupo.includes('ESTIVADA') && grupo.includes('MENORES')) return 'VEÍCULOS MENORES';
+            return '';
+        }
+
+        // Inicia
+        document.addEventListener('DOMContentLoaded', carregarDados);
+
+    </script>
+</body>
+</html>
