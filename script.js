@@ -1,6 +1,6 @@
 // ATENÇÃO: Use as mesmas chaves do seu projeto Supabase original
-const SUPABASE_URL = 'https://xizamzncvtacaunhmsrv.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpemFtem5jdnRhY2F1bmhtc3J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4NTM3MTQsImV4cCI6MjA3NzQyOTcxNH0.tNZhQiPlpQCeFTKyahFOq_q-5i3_94AHpmIjYYrnTc8';
+const SUPABASE_URL = 'https://nsdpsdvzqbubnhspfwwb.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zZHBzZHZ6cWJ1Ym5oc3Bmd3diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NDA0NjcsImV4cCI6MjA3ODAxNjQ2N30.0odDxhIYXw2oc2tx21Q-f1eljFuYfAfqt8IbVNnkkDM';
 
 // ATENÇÃO: Mantenha o proxy que você já usa
 const SUPABASE_PROXY_URL = '/api/proxy';
@@ -130,7 +130,7 @@ window.GG = {
         } catch (error) {
             console.error("Erro detalhado na inicialização do app:", error);
             this.mostrarAlerta(`Erro ao carregar dados: ${error.message}`, 'error', 10000);
-            this.logout(); 
+            // this.logout(); // <-- TEMPORARIAMENTE DESATIVADO PARA DEBUG
         }
     },
 
