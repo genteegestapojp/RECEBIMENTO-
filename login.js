@@ -1,5 +1,5 @@
 // ATENÇÃO: Use as mesmas chaves do seu projeto Supabase principal (script.js)
-const SUPABASE_URL = 'https://xizamzncvtacaunhmsrv.supabase.co';
+const SUPABASE_URL = 'https://nsdpsdvzqbubnhspfwwb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpemFtem5jdnRhY2F1bmhtc3J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4NTM3MTQsImV4cCI6MjA3NzQyOTcxNH0.tNZhQiPlpQCeFTKyahFOq_q-5i3_94AHpmIjYYrnTc8';
 
 // Apenas declaramos as variáveis aqui
