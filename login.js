@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'https://xizamzncvtacaunhmsrv.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpemFtem5jdnRhY2F1bmhtc3J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE4NTM3MTQsImV4cCI6MjA3NzQyOTcxNH0.tNZhQiPlpQCeFTKyahFOq_q-5i3_94AHpmIjYYrnTc8';
+const SUPABASE_URL = 'https://nsdpsdvzqbubnhspfwwb.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zZHBzZHZ6cWJ1Ym5oc3Bmd3diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NDA0NjcsImV4cCI6MjA3ODAxNjQ2N30.0odDxhIYXw2oc2tx21Q-f1eljFuYfAfqt8IbVNnkkDM';
 
 // Apenas declaramos as variáveis aqui
 let loginCard, requestAccessCard, formTitle, formSubtitle, emailForm, emailSubmitBtn;
@@ -203,8 +203,9 @@ function updateUI(mode) {
         loginCard.style.display = 'block';
         requestAccessCard.style.display = 'none';
 
-        formTitle.textContent = 'Acesso ao Sistema'; // Corrigido para o novo layout
-        formSubtitle.textContent = 'Avaliação de Desempenho G&G'; // Corrigido
+        // USA O TEXTO ATUALIZADO DO HTML
+        formTitle.textContent = document.getElementById('formTitle').textContent || 'Acesso ao Sistema'; 
+        formSubtitle.textContent = document.getElementById('formSubtitle').textContent || 'Controle de Recebimento Perlog'; 
         emailSubmitBtn.innerHTML = 'ENTRAR'; // Corrigido
         
         // toggleText.textContent = 'Não tem uma conta?'; // toggleText removido
@@ -256,6 +257,9 @@ async function handleEmailFormSubmit(e) {
                 password: password,
             });
             if (error) throw error;
+            
+            // ESTA É A LINHA QUE IMPORTA:
+            // Ela redireciona para o app.html, que é o seu sistema Perlog.
             window.location.href = 'app.html';
         }
     } catch (error) {
