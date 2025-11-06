@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título atualizado para o novo sistema -->
     <title>Sistema Perlog | Controle de Recebimento</title>
-    <!-- O fav.png é o logo 'JP' que você enviou -->
     <link rel="icon" href="fav.png" type="image/png">
     <meta name="theme-color" content="#011627">
-   <!-- Link para o SEU style.css original -->
    <link rel="stylesheet" href="style.css?v=2">
-    <!-- O laudo.css não é necessário aqui, a menos que você queira um laudo de recebimento -->
-    <!-- <link rel="stylesheet" href="laudo.css"> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -19,38 +14,30 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- O App Shell é mantido idêntico -->
     <div id="appShell" class="h-screen flex flex-col" style="display: none;">
 
-        <!-- TopBar: Identidade visual atualizada -->
         <header id="topBar" class="flex-shrink-0">
             <div class="flex items-center gap-4">
                 <button id="sidebarToggle" class="btn-icon">
                     <i data-feather="menu" class="h-5 w-5"></i>
                 </button>
-                <!-- O icon.png é o logo 'Perlog' que você enviou -->
                 <img src="icon.png" class="h-8 w-auto" alt="Logo Perlog">
                 <div class="separator"></div>
                 <div class="flex flex-col">
-                    <!-- Títulos atualizados -->
                     <span class="text-sm font-semibold text-white" id="topBarProjectName">Sistema Perlog</span>
                     <span class="text-xs text-gray-400" id="topBarOrgName">Controle de Recebimento</span>
                 </div>
             </div>
             
             <div class="flex-1 flex justify-center px-8">
-                <!-- Espaço para busca central, se necessário -->
             </div>
             
-            <!-- Perfil e Botão de Ação -->
             <div class="flex items-center gap-4">
-                <!-- Botão de ação atualizado -->
                 <button class="btn btn-success" onclick="window.GG.showView('agendamentoView', document.querySelector('a[href=\'#agendamento\']'))">
                     <i data-feather="plus" class="h-4 w-4 mr-2"></i>
                     <span class="hidden md:inline">Novo Agendamento</span>
                 </button>
                 <div class="separator"></div>
-                <!-- Dropdown de Perfil (Mantido) -->
                 <div id="profileDropdown" class="relative">
                     <button id="profileDropdownButton" class="flex items-center gap-2 rounded-full hover:bg-gray-700 p-1">
                         <img id="topBarUserAvatar" src="https://i.imgur.com/80SsE11.png" class="w-8 h-8 rounded-full object-cover bg-gray-600">
@@ -78,30 +65,23 @@
             </div>
         </header>
 
-        <!-- Estrutura principal mantida -->
         <div id="mainSystem" class="flex flex-1 overflow-hidden">
 
-            <!-- Sidebar: Navegação atualizada -->
             <aside class="sidebar collapsed">
                 <nav class="p-2 pt-4">
-                    <!-- Link "Home" agora é "Resumo" -->
                     <a href="#resumo" class="nav-item" title="Resumo" onclick="window.GG.showView('resumoView', this)">
                         <i data-feather="home" class="h-5 w-5 mr-3"></i> <span class="nav-text">Resumo</span>
                     </a>
-                    <!-- Novo link "Agendamento" -->
                     <a href="#agendamento" class="nav-item" title="Agendamento" onclick="window.GG.showView('agendamentoView', this)">
                         <i data-feather="calendar" class="h-5 w-5 mr-3"></i> <span class="nav-text">Agendamento</span>
                     </a>
-                    <!-- "Histórico" agora é "Recebimento" -->
                     <a href="#recebimento" class="nav-item" title="Recebimento" onclick="window.GG.showView('recebimentoView', this)">
                         <i data-feather="truck" class="h-5 w-5 mr-3"></i> <span class="nav-text">Recebimento</span>
                     </a>
-                    <!-- Links "Relatórios" e "Colaborador" removidos -->
 
                     <div class="mt-4 border-t border-gray-700 pt-2">
                         <span class="p-3 text-xs font-semibold text-gray-500 uppercase nav-text">Administração</span>
                     </div>
-                    <!-- Links de Config e Perfil mantidos -->
                     <a href="#configuracoes" class="nav-item" title="Configurações" onclick="window.GG.showView('configuracoesView', this)">
                         <i data-feather="settings" class="h-5 w-5 mr-3"></i> <span class="nav-text">Configurações</span>
                     </a>
@@ -116,18 +96,14 @@
             
             <div id="sidebarOverlay"></div>
 
-            <!-- Main Content: Views atualizadas -->
             <main class="main-content">
                 <div class="container mx-auto px-6 py-8">
 
-                    <!-- Conteúdo: Resumo (antiga HomeView) -->
                     <div id="resumoView" class="view-content active">
                         <h1><i data-feather="home" class="text-blue-600"></i> Resumo Operacional</h1>
                         <p class="mb-6 text-gray-600">Visão geral dos recebimentos e status da operação.</p>
                         
-                        <!-- Grid de Resumo (baseado na Imagem 2) -->
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <!-- Card AGENDA (Azul) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-blue-600 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-blue-500">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -140,7 +116,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card RECEBIDOS (Verde) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-green-600 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-green-500">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -152,7 +127,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Card BACKLOG (Amarelo) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-yellow-500 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-yellow-400">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -164,7 +138,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Card RECUSA (Vermelho) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-red-600 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-red-500">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -176,7 +149,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card R$ RECEBIDO (Azul Escuro) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-blue-800 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-blue-700">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -188,7 +160,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card NO SHOW (Cinza) -->
                             <div class="rounded-lg shadow-md overflow-hidden bg-gray-700 text-white">
                                 <div class="p-4 flex justify-between items-center border-b border-gray-600">
                                     <h3 class="text-lg font-semibold flex items-center gap-2">
@@ -202,7 +173,6 @@
                         </div>
                     </div>
 
-                    <!-- Conteúdo: Agendamento (antiga AvaliacaoView) -->
                     <div id="agendamentoView" class="view-content">
                         <h1><i data-feather="calendar" class="text-blue-600"></i> Agendamento de Cargas</h1>
                         
@@ -243,11 +213,9 @@
                         </div>
                     </div>
 
-                    <!-- Conteúdo: Recebimento (antiga HistoricoView) -->
                     <div id="recebimentoView" class="view-content">
                         <h1><i data-feather="truck" class="text-blue-600"></i> Controle de Recebimento</h1>
                         
-                        <!-- Filtros (Estrutura mantida) -->
                         <div class="info-card">
                             <h3><i data-feather="filter" class="h-5 w-5"></i> Filtros</h3>
                             <div class="form-row">
@@ -275,7 +243,6 @@
                             </div>
                         </div>
                         
-                        <!-- Tabela de Recebimento (Colunas solicitadas) -->
                         <div id="tabelaRecebimentoContainer" class="table-container">
                             <div id="tabelaRecebimento">
                                 <table class="tabela">
@@ -296,7 +263,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Mock Data (Exemplo) -->
                                         <tr>
                                             <td>05/11/2025</td>
                                             <td>1001</td>
@@ -333,14 +299,12 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <!-- Fim Mock Data -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Conteúdo: Configurações (Ajustado) -->
                     <div id="configuracoesView" class="view-content">
                         <div id="accessStatusConfig" class="access-status" style="display: none;"></div>
                         <h1><i data-feather="settings" class="text-blue-600"></i> Configurações do Sistema</h1>
@@ -348,7 +312,6 @@
                         <div id="configAdminOnly" style="display: none;">
                             <div class="alert alert-warning"><i data-feather="alert-triangle" class="h-4 w-4 mr-2"></i> Acesso restrito a administradores.</div>
                             
-                            <!-- Abas de Configuração Atualizadas -->
                             <div class="config-tabs">
                                 <button class="config-tab-item active" onclick="window.GG.showConfigTab('tabelaDescarga', this)">
                                     <i data-feather="dollar-sign"></i> Tabela de Descarga
@@ -361,11 +324,16 @@
                                 </button>
                             </div>
                             
-                            <!-- ABA 1: TABELA DE DESCARGA (Nova) -->
                             <div id="configTabTabelaDescarga" class="config-tab-content active">
                                 <div class="info-card">
-                                    <h3><i data-feather="edit" class="h-5 w-5"></i> Gerenciar Tabela de Valores de Descarga</h3>
-                                    <p class="mb-4 text-sm text-gray-600">
+                                    <div class="flex justify-between items-center mb-4 pb-4 border-b">
+                                        <h3 class="mb-0 pb-0 border-b-0"><i data-feather="edit" class="h-5 w-5"></i> Gerenciar Tabela de Valores de Descarga</h3>
+                                        <a href="tabela_descarga_print.html" target="_blank" class="btn btn-sm btn-info">
+                                            <i data-feather="printer" class="h-4 w-4 mr-2"></i>
+                                            Imprimir Tabela de Preços
+                                        </a>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
                                         Estes são os valores padrão que serão usados no cálculo do "Valor Cobrado" no recebimento.
                                     </p>
                                     <div class="table-container">
@@ -379,7 +347,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Mock Data (baseado na Imagem 1) -->
                                                 <tr>
                                                     <td>CARGA PALETIZADA</td>
                                                     <td>Descarga com empilhadeira Elétrica</td>
@@ -420,14 +387,12 @@
                                                         </button>
                                                     </td>
                                                 </tr>
-                                                <!-- etc. -->
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- ABA 2: CHAVES PIX (Nova) -->
                             <div id="configTabChavesPix" class="config-tab-content">
                                 <div class="info-card">
                                     <h3><i data-feather="plus-circle"></i> Cadastrar Chave PIX por Filial</h3>
@@ -480,9 +445,7 @@
                                 </div>
                             </div>
                             
-                            <!-- ABA 3: GERENCIAR USUÁRIOS (Mantida) -->
                             <div id="configTabUsuarios" class="config-tab-content">
-                                <!-- O conteúdo desta aba foi mantido do seu app.html original -->
                                 <div class="info-card">
                                     <h3><i data-feather="user-plus"></i> Solicitações de Acesso Pendentes</h3>
                                     <div class="table-container">
@@ -511,7 +474,6 @@
                         </div>
                     </div>
                     
-                    <!-- Conteúdo: Perfil (Mantido) -->
                     <div id="perfilView" class="view-content">
                          <h1><i data-feather="user" class="text-blue-600"></i> Meu Perfil</h1>
                         <div class="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto info-card">
@@ -555,13 +517,10 @@
         </div>
     </div>
 
-    <!-- Container de Notificações (Mantido) -->
     <div id="notificationContainer"></div>
     
-    <!-- Tela de Loading (Mantida) -->
      <div class="loading" id="loading"><div class="spinner"></div><p>Processando...</p></div>
     
-     <!-- Modal Genérico (Mantido - Útil para editar Tabela de Descarga, PIX, etc.) -->
      <div id="editModal" class="modal">
        <div class="modal-content">
         <span class="modal-close" onclick="window.GG.fecharModal()">&times;</span>
@@ -569,7 +528,6 @@
         <form id="modalForm" onsubmit="event.preventDefault(); window.GG.salvarEdicaoModal();">
             <input type="hidden" id="editItemId">
             <input type="hidden" id="editItemType">
-            <!-- Campos do modal genérico serão preenchidos pelo JS -->
             <div id="modalFields"></div>
             <button type="submit" class="btn btn-success">Salvar Alterações</button>
             <button type="button" class="btn btn-secondary" onclick="window.GG.fecharModal()">Cancelar</button>
@@ -577,7 +535,6 @@
        </div>
      </div>
      
-     <!-- Modal de Edição de Usuário (Mantido - Usado pela aba Configurações -> Usuários) -->
      <div id="userEditModal" class="modal">
        <div class="modal-content" style="width: 600px; max-width: 95vw;">
         <span class="modal-close" onclick="window.GG.fecharModalUsuario()">&times;</span>
@@ -633,10 +590,6 @@
        </div>
      </div>
 
-     <!-- O Modal 'pessoalEditModal' foi removido pois a aba 'Pessoal' foi removida -->
-
-
-    <!-- O script.js original será carregado, mas precisará de ajustes -->
     <script src="script.js"></script>
     <script>
         feather.replace();
