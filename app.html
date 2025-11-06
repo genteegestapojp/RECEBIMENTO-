@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- TÍTULO ATUALIZADO -->
-    <title>Controle de Recebimento</title>
+    <!-- Título atualizado para o novo sistema -->
+    <title>Sistema Perlog | Controle de Recebimento</title>
+    <!-- O fav.png é o logo 'JP' que você enviou -->
     <link rel="icon" href="fav.png" type="image/png">
     <meta name="theme-color" content="#011627">
-    <link rel="stylesheet" href="style.css?v=2">
+   <!-- Link para o SEU style.css original -->
+   <link rel="stylesheet" href="style.css?v=2">
+    <!-- O laudo.css não é necessário aqui, a menos que você queira um laudo de recebimento -->
+    <!-- <link rel="stylesheet" href="laudo.css"> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -15,32 +19,38 @@
 </head>
 <body class="bg-gray-100">
 
+    <!-- O App Shell é mantido idêntico -->
     <div id="appShell" class="h-screen flex flex-col" style="display: none;">
 
+        <!-- TopBar: Identidade visual atualizada -->
         <header id="topBar" class="flex-shrink-0">
             <div class="flex items-center gap-4">
                 <button id="sidebarToggle" class="btn-icon">
                     <i data-feather="menu" class="h-5 w-5"></i>
                 </button>
-                <img src="icon.png" class="h-8 w-auto" alt="Logo">
+                <!-- O icon.png é o logo 'Perlog' que você enviou -->
+                <img src="icon.png" class="h-8 w-auto" alt="Logo Perlog">
                 <div class="separator"></div>
                 <div class="flex flex-col">
-                    <!-- TEXTO ATUALIZADO -->
-                    <span class="text-sm font-semibold text-white" id="topBarProjectName">Controle de Recebimento</span>
-                    <span class="text-xs text-gray-400" id="topBarOrgName">Gestão de Descargas</span>
+                    <!-- Títulos atualizados -->
+                    <span class="text-sm font-semibold text-white" id="topBarProjectName">Sistema Perlog</span>
+                    <span class="text-xs text-gray-400" id="topBarOrgName">Controle de Recebimento</span>
                 </div>
             </div>
             
             <div class="flex-1 flex justify-center px-8">
+                <!-- Espaço para busca central, se necessário -->
             </div>
             
+            <!-- Perfil e Botão de Ação -->
             <div class="flex items-center gap-4">
-                <!-- ATUALIZADO: Link para a nova view de Lançamento -->
-                <button class="btn btn-success" onclick="window.CR.showView('lancamentoView', document.querySelector('a[href=\'#lancamento\']'))">
+                <!-- Botão de ação atualizado -->
+                <button class="btn btn-success" onclick="window.GG.showView('agendamentoView', document.querySelector('a[href=\'#agendamento\']'))">
                     <i data-feather="plus" class="h-4 w-4 mr-2"></i>
-                    <span class="hidden md:inline">Novo Lançamento</span>
+                    <span class="hidden md:inline">Novo Agendamento</span>
                 </button>
                 <div class="separator"></div>
+                <!-- Dropdown de Perfil (Mantido) -->
                 <div id="profileDropdown" class="relative">
                     <button id="profileDropdownButton" class="flex items-center gap-2 rounded-full hover:bg-gray-700 p-1">
                         <img id="topBarUserAvatar" src="https://i.imgur.com/80SsE11.png" class="w-8 h-8 rounded-full object-cover bg-gray-600">
@@ -52,14 +62,14 @@
                             <span class="block text-sm font-medium text-white" id="dropdownUserName">...</span>
                             <span class="block text-xs text-gray-400" id="dropdownUserEmail">...</span>
                         </div>
-                        <a href="#perfil" class="dropdown-item" onclick="window.CR.showView('perfilView', document.querySelector('a[href=\'#perfil\']'))">
+                        <a href="#perfil" class="dropdown-item" onclick="window.GG.showView('perfilView', document.querySelector('a[href=\'#perfil\']'))">
                             <i data-feather="user" class="h-4 w-4 mr-2"></i> Meu Perfil
                         </a>
-                        <a href="#configuracoes" class="dropdown-item" onclick="window.CR.showView('configuracoesView', document.querySelector('a[href=\'#configuracoes\']'))">
+                        <a href="#configuracoes" class="dropdown-item" onclick="window.GG.showView('configuracoesView', document.querySelector('a[href=\'#configuracoes\']'))">
                             <i data-feather="settings" class="h-4 w-4 mr-2"></i> Configurações
                         </a>
                         <div class="border-t border-gray-600">
-                            <a href="#" class="dropdown-item text-red-400" onclick="window.CR.logout()">
+                            <a href="#" class="dropdown-item text-red-400" onclick="window.GG.logout()">
                                 <i data-feather="log-out" class="h-4 w-4 mr-2"></i> Sair
                             </a>
                         </div>
@@ -68,37 +78,37 @@
             </div>
         </header>
 
+        <!-- Estrutura principal mantida -->
         <div id="mainSystem" class="flex flex-1 overflow-hidden">
 
-            <!-- NAVEGAÇÃO ATUALIZADA -->
+            <!-- Sidebar: Navegação atualizada -->
             <aside class="sidebar collapsed">
                 <nav class="p-2 pt-4">
-                    <a href="#home" class="nav-item" title="Home" onclick="window.CR.showView('homeView', this)">
-                        <i data-feather="home" class="h-5 w-5 mr-3"></i> <span class="nav-text">Home</span>
+                    <!-- Link "Home" agora é "Resumo" -->
+                    <a href="#resumo" class="nav-item" title="Resumo" onclick="window.GG.showView('resumoView', this)">
+                        <i data-feather="home" class="h-5 w-5 mr-3"></i> <span class="nav-text">Resumo</span>
                     </a>
-                    <a href="#lancamento" class="nav-item" title="Novo Lançamento" onclick="window.CR.showView('lancamentoView', this)">
-                        <i data-feather="calendar" class="h-5 w-5 mr-3"></i> <span class="nav-text">Agenda/Lançamento</span>
+                    <!-- Novo link "Agendamento" -->
+                    <a href="#agendamento" class="nav-item" title="Agendamento" onclick="window.GG.showView('agendamentoView', this)">
+                        <i data-feather="calendar" class="h-5 w-5 mr-3"></i> <span class="nav-text">Agendamento</span>
                     </a>
-                    <a href="#acompanhamento" class="nav-item" title="Acompanhamento" onclick="window.CR.showView('acompanhamentoView', this)">
-                        <i data-feather="truck" class="h-5 w-5 mr-3"></i> <span class="nav-text">Acompanhamento</span>
+                    <!-- "Histórico" agora é "Recebimento" -->
+                    <a href="#recebimento" class="nav-item" title="Recebimento" onclick="window.GG.showView('recebimentoView', this)">
+                        <i data-feather="truck" class="h-5 w-5 mr-3"></i> <span class="nav-text">Recebimento</span>
                     </a>
-                    <a href="#relatorios" class="nav-item" title="Relatórios" onclick="window.CR.showView('relatoriosView', this)">
-                        <i data-feather="bar-chart-2" class="h-5 w-5 mr-3"></i> <span class="nav-text">Relatórios</span>
-                    </a>
-                    <a href="#fornecedor" class="nav-item" title="Desempenho Fornecedor" onclick="window.CR.showView('fornecedorView', this)">
-                        <i data-feather="briefcase" class="h-5 w-5 mr-3"></i> <span class="nav-text">Fornecedor</span>
-                    </a>
+                    <!-- Links "Relatórios" e "Colaborador" removidos -->
 
                     <div class="mt-4 border-t border-gray-700 pt-2">
                         <span class="p-3 text-xs font-semibold text-gray-500 uppercase nav-text">Administração</span>
                     </div>
-                    <a href="#configuracoes" class="nav-item" title="Configurações" onclick="window.CR.showView('configuracoesView', this)">
+                    <!-- Links de Config e Perfil mantidos -->
+                    <a href="#configuracoes" class="nav-item" title="Configurações" onclick="window.GG.showView('configuracoesView', this)">
                         <i data-feather="settings" class="h-5 w-5 mr-3"></i> <span class="nav-text">Configurações</span>
                     </a>
-                    <a href="#perfil" class="nav-item" title="Meu Perfil" onclick="window.CR.showView('perfilView', this)">
+                    <a href="#perfil" class="nav-item" title="Meu Perfil" onclick="window.GG.showView('perfilView', this)">
                         <i data-feather="user" class="h-5 w-5 mr-3"></i> <span class="nav-text">Meu Perfil</span>
                     </a>
-                    <a href="#" id="logoutLink" class="nav-item" title="Sair" onclick="window.CR.logout()">
+                    <a href="#" id="logoutLink" class="nav-item" title="Sair" onclick="window.GG.logout()">
                         <i data-feather="log-out" class="h-5 w-5 mr-3 text-red-400"></i> <span class="nav-text text-red-400">Sair</span>
                     </a>
                 </nav>
@@ -106,284 +116,373 @@
             
             <div id="sidebarOverlay"></div>
 
+            <!-- Main Content: Views atualizadas -->
             <main class="main-content">
                 <div class="container mx-auto px-6 py-8">
 
-                    <!-- Conteúdo: Home (Resumo do Dia Anterior) -->
-                    <div id="homeView" class="view-content active">
-                        <h1><i class="fas fa-tachometer-alt"></i> Resumo do Dia</h1>
-                        <div id="statusConexaoHome" class="status-conexao">
-                            <span id="textoStatus"><i class="fas fa-sync fa-spin"></i> Verificando conexão...</span>
-                        </div>
-                        <div class="info-card">
-                            <h3>Resumo do último dia de lançamento (<span id="homeUltimoDia">--/--/----</span>)</h3>
-                        </div>
-                        <!-- DASHBOARD ATUALIZADO (Baseado em image_e95c66.png) -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <!-- Bloco Agenda -->
-                            <div class="stat-card-dash" style="border-top-color: #3b82f6;">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #3b82f6;">AGENDA</span>
-                                    <i data-feather="calendar" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homeAgenda">0</div>
-                            </div>
-                            <!-- Bloco Recebidos -->
-                            <div class="stat-card-dash" style="border-top-color: #22c55e;">
-                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #22c55e;">RECEBIDOS</span>
-                                    <i data-feather="truck" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homeRecebidos">0</div>
-                            </div>
-                            <!-- Bloco R$ Recebido -->
-                            <div class="stat-card-dash" style="border-top-color: #1d4ed8;">
-                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #1d4ed8;">R$ RECEBIDO</span>
-                                    <i data-feather="dollar-sign" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homeValorRecebido">R$ 0,00</div>
-                            </div>
-                            <!-- Bloco Recusa -->
-                            <div class="stat-card-dash" style="border-top-color: #ef4444;">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #ef4444;">RECUSA</span>
-                                    <i data-feather="x-circle" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homeRecusa">0</div>
-                            </div>
-                            <!-- Bloco No Show -->
-                            <div class="stat-card-dash" style="border-top-color: #6b7280;">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #6b7280;">NO SHOW</span>
-                                    <i data-feather="slash" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homeNoShow">0</div>
-                            </div>
-                            <!-- Bloco Pendente -->
-                            <div class="stat-card-dash" style="border-top-color: #f59e0b;">
-                                 <div class="flex justify-between items-center mb-2">
-                                    <span class="stat-label" style="color: #f59e0b;">PAGTO PENDENTE</span>
-                                    <i data-feather="alert-triangle" class="h-6 w-6 text-gray-400"></i>
-                                </div>
-                                <div class="stat-number" id="homePendente">0</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Conteúdo: Novo Lançamento (ID ATUALIZADO) -->
-                    <div id="lancamentoView" class="view-content">
-                        <h1><i class="fas fa-edit"></i> Registrar Lançamento de Descarga</h1>
-                        <div id="statusDados" class="alert alert-info" style="display:none;"></div>
+                    <!-- Conteúdo: Resumo (antiga HomeView) -->
+                    <div id="resumoView" class="view-content active">
+                        <h1><i data-feather="home" class="text-blue-600"></i> Resumo Operacional</h1>
+                        <p class="mb-6 text-gray-600">Visão geral dos recebimentos e status da operação.</p>
                         
-                        <!-- FORMULÁRIO ATUALIZADO -->
-                        <form id="form-lancamento" onsubmit="event.preventDefault();">
-                            <div class="info-card">
-                                <h3><i data-feather="info" class="h-5 w-5 mr-2"></i> Detalhes da Descarga</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="lancamentoDataDescarga">Data Descarga *</label>
-                                        <input type="date" id="lancamentoDataDescarga" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lancamentoCodigoAgenda">Código Agenda</label>
-                                        <input type="text" id="lancamentoCodigoAgenda" placeholder="Código do agendamento...">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lancamentoFornecedor">Fornecedor *</label>
-                                        <input type="text" id="lancamentoFornecedor" required list="listaFornecedores" placeholder="Nome do fornecedor...">
-                                        <datalist id="listaFornecedores"></datalist>
-                                    </div>
+                        <!-- Grid de Resumo (baseado na Imagem 2) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <!-- Card AGENDA (Azul) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-blue-600 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-blue-500">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="calendar" class="h-5 w-5"></i> AGENDA
+                                    </h3>
+                                    <span class="text-xs bg-blue-700 px-2 py-1 rounded-full">Hoje</span>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="lancamentoNotaEmitida">Nota Emitida</label>
-                                        <input type="text" id="lancamentoNotaEmitida" placeholder="Número da nota...">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lancamentoCD">CD (Filial) *</label>
-                                        <input type="text" id="lancamentoCD" required placeholder="Filial de recebimento...">
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="lancamentoRefNota">Ref. Nota</label>
-                                        <input type="text" id="lancamentoRefNota" placeholder="Referência da nota...">
-                                    </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-6xl font-bold">33</span>
                                 </div>
                             </div>
 
-                            <div class="info-card">
-                                <h3><i data-feather="dollar-sign" class="h-5 w-5 mr-2"></i> Cobrança e Pagamento</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="lancamentoTipoDescarga">Tipo Descarga *</label>
-                                        <select id="lancamentoTipoDescarga" required onchange="window.CR.atualizarValorCobrado()">
-                                            <option value="">Selecione o tipo...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lancamentoValorCobrado">Valor Cobrado (R$)</label>
-                                        <input type="number" id="lancamentoValorCobrado" placeholder="0.00" step="0.01">
-                                    </div>
+                            <!-- Card RECEBIDOS (Verde) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-green-600 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-green-500">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="check-square" class="h-5 w-5"></i> RECEBIDOS
+                                    </h3>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="lancamentoDataPagamento">Data Pagamento</label>
-                                        <input type="date" id="lancamentoDataPagamento">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="lancamentoTipoPagamento">Tipo Pagamento</label>
-                                        <select id="lancamentoTipoPagamento">
-                                            <option value="">Selecione...</option>
-                                            <option value="PIX">PIX</option>
-                                            <option value="BOLETO">BOLETO</option>
-                                            <option value="DINHEIRO">DINHEIRO</option>
-                                            <option value="PENDENTE">PENDENTE</option>
-                                        </select>
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="lancamentoPagador">Pagador</label>
-                                        <input type="text" id="lancamentoPagador" placeholder="Nome do pagador...">
-                                    </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-6xl font-bold">28</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Card BACKLOG (Amarelo) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-yellow-500 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-yellow-400">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="archive" class="h-5 w-5"></i> BACKLOG
+                                    </h3>
+                                </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-6xl font-bold">0</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Card RECUSA (Vermelho) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-red-600 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-red-500">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="x-circle" class="h-5 w-5"></i> RECUSA
+                                    </h3>
+                                </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-6xl font-bold">0</span>
                                 </div>
                             </div>
 
-                            <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
-                                <button type="button" class="btn btn-success" id="btnSalvarLancamento" onclick="window.CR.salvarRecebimento()">
-                                    <i class="fas fa-save"></i> Salvar Lançamento
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="window.CR.limparFormulario(true)">
-                                    <i class="fas fa-undo"></i> Limpar
-                                </button>
+                            <!-- Card R$ RECEBIDO (Azul Escuro) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-blue-800 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-blue-700">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="dollar-sign" class="h-5 w-5"></i> R$ RECEBIDO (Descarga)
+                                    </h3>
+                                </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-4xl font-bold">R$ 1.466.710</span>
+                                </div>
                             </div>
-                        </form>
+
+                            <!-- Card NO SHOW (Cinza) -->
+                            <div class="rounded-lg shadow-md overflow-hidden bg-gray-700 text-white">
+                                <div class="p-4 flex justify-between items-center border-b border-gray-600">
+                                    <h3 class="text-lg font-semibold flex items-center gap-2">
+                                        <i data-feather="slash" class="h-5 w-5"></i> NO SHOW
+                                    </h3>
+                                </div>
+                                <div class="p-6 text-center">
+                                    <span class="text-6xl font-bold">5</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Conteúdo: Acompanhamento (ID ATUALIZADO) -->
-                    <div id="acompanhamentoView" class="view-content">
-                        <div id="accessStatusHistorico" class="access-status" style="display: none;"></div>
-                        <h1><i data-feather="truck" class="h-6 w-6"></i> Acompanhamento Geral</h1>
+                    <!-- Conteúdo: Agendamento (antiga AvaliacaoView) -->
+                    <div id="agendamentoView" class="view-content">
+                        <h1><i data-feather="calendar" class="text-blue-600"></i> Agendamento de Cargas</h1>
+                        
                         <div class="info-card">
-                            <h3><i class="fas fa-filter"></i> Filtros</h3>
-                            <!-- FILTROS ATUALIZADOS -->
-                            <div class="form-row">
-                                <div class="form-group"><label for="filtroDataInicio">Data Inicial</label><input type="date" id="filtroDataInicio" onchange="window.CR.aplicarFiltros()"></div>
-                                <div class="form-group"><label for="filtroDataFim">Data Final</label><input type="date" id="filtroDataFim" onchange="window.CR.aplicarFiltros()"></div>
-                                <div class="form-group"><label for="filtroFornecedor">Fornecedor</label><input type="text" id="filtroFornecedor" placeholder="Filtrar por nome..." oninput="window.CR.aplicarFiltros()"></div>
+                            <h3><i data-feather="plus-circle" class="h-5 w-5"></i> Novo Agendamento</h3>
+                            <form id="form-agendamento" onsubmit="event.preventDefault();">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="agenda-data">Data</label>
+                                        <input type="datetime-local" id="agenda-data" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agenda-fornecedor">Fornecedor</label>
+                                        <input type="text" id="agenda-fornecedor" placeholder="Digite o nome do fornecedor...">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="agenda-cd">CD (Filial)</label>
+                                        <select id="agenda-cd"><option value="">Selecione a filial...</option></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agenda-refnota">Ref. Nota (Opcional)</label>
+                                        <input type="text" id="agenda-refnota" placeholder="Ex: 12345, 12346...">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="window.GG.salvarAgendamento()">
+                                    <i data-feather="save" class="h-4 w-4 mr-2"></i> Salvar Agendamento
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3><i data-feather="list" class="h-5 w-5"></i> Agendamentos Futuros</h3>
+                            <div id="tabelaAgendamentosContainer" class="table-container">
+                                <div id="tabelaAgendamentos"><p style="text-align: center; padding: 20px;">Carregando agendamentos...</p></div>
                             </div>
-                             <div class="form-row">
-                                <div class="form-group"><label for="filtroPagamento">Status Pagamento</label>
-                                    <select id="filtroPagamento" onchange="window.CR.aplicarFiltros()">
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo: Recebimento (antiga HistoricoView) -->
+                    <div id="recebimentoView" class="view-content">
+                        <h1><i data-feather="truck" class="text-blue-600"></i> Controle de Recebimento</h1>
+                        
+                        <!-- Filtros (Estrutura mantida) -->
+                        <div class="info-card">
+                            <h3><i data-feather="filter" class="h-5 w-5"></i> Filtros</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="filtroDataRec">Período</label>
+                                    <input type="date" id="filtroDataRec" onchange="window.GG.aplicarFiltrosRecebimento()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="filtroFornecedorRec">Fornecedor</label>
+                                    <input type="text" id="filtroFornecedorRec" placeholder="Filtrar por fornecedor..." oninput="window.GG.aplicarFiltrosRecebimento()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="filtroStatusRec">Status Pagamento</label>
+                                    <select id="filtroStatusRec" onchange="window.GG.aplicarFiltrosRecebimento()">
                                         <option value="">Todos</option>
-                                        <option value="PENDENTE">Pendente</option>
                                         <option value="PAGO">Pago</option>
+                                        <option value="PENDENTE">Pendente</option>
                                     </select>
                                 </div>
-                                <div class="form-group" style="align-self: flex-end;"><button type="button" class="btn btn-sm btn-secondary" onclick="window.CR.limparFiltros()" style="width: 100%;"><i class="fas fa-times"></i> Limpar</button></div>
-                            </div>
-                        </div>
-                        <div id="tabelaAcompanhamentoContainer" class="table-container">
-                            <!-- TABELA ATUALIZADA -->
-                            <div id="tabelaAcompanhamento"><p style="text-align: center; padding: 20px;">Carregando histórico...</p></div>
-                        </div>
-                        <div style="text-align: center; margin-top: 20px;">
-                            <button type="button" class="btn btn-warning" onclick="window.CR.exportarDados()"><i class="fas fa-download"></i> Exportar Visão</button>
-                        </div>
-                    </div>
-
-                    <!-- Conteúdo: Relatórios (Sem mudança de HTML, JS vai mudar) -->
-                    <div id="relatoriosView" class="view-content">
-                         <div id="accessStatusRelatorios" class="access-status" style="display: none;"></div>
-                        <h1><i class="fas fa-chart-bar"></i> Relatórios Gerenciais</h1>
-                        <div class="alert alert-info" id="relatoriosAdminOnly" style="display: none;">
-                            <i class="fas fa-info-circle"></i> Visualizando relatórios como Administrador (todos os dados).
-                        </div>
-
-                        <div class="report-grid">
-                            <div class="chart-card">
-                                <h3><i data-feather="dollar-sign"></i> Top 10 Fornecedores (Valor Recebido)</h3>
-                                <div class="chart-container-wrapper">
-                                    <canvas id="chartTopFornecedores"></canvas>
-                                </div>
-                            </div>
-                            <div class="chart-card">
-                                <h3><i data-feather="truck"></i> Total Recebido por Filial (CD)</h3>
-                                <div class="chart-container-wrapper">
-                                    <canvas id="chartMediaSecao"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chart-card">
-                            <h3><i data-feather="trending-up"></i> Evolução de Recebimento (R$ - Últimos 12 Meses)</h3>
-                            <div class="chart-container-wrapper" style="height: 350px;">
-                                <canvas id="chartEvolucaoGeral"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Conteúdo: Fornecedor (ID ATUALIZADO) -->
-                    <div id="fornecedorView" class="view-content">
-                        <h1><i data-feather="briefcase" class="h-6 w-6"></i> Desempenho do Fornecedor</h1>
-                        <div class="info-card">
-                            <h3><i class="fas fa-filter"></i> Selecionar Fornecedor</h3>
-                            <div class="form-row">
-                                <div class="form-group" style="grid-column: 1 / -1;">
-                                    <label for="fornecedorSearchInput">Buscar Fornecedor (Nome)</label>
-                                    <input list="listaFornecedores" id="fornecedorSearchInput" class="w-full" placeholder="Digite o nome do fornecedor..." onchange="window.CR.carregarDadosFornecedor(this.value)">
-                                    <!-- Datalist é o mesmo do formulário de lançamento -->
-                                    <small>A lista sugere fornecedores com lançamentos existentes.</small>
+                                <div class="form-group" style="align-self: flex-end;">
+                                    <button type="button" class="btn btn-sm btn-secondary" onclick="window.GG.limparFiltrosRecebimento()" style="width: 100%;">
+                                        <i data-feather="x" class="h-4 w-4 mr-2"></i> Limpar
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         
-                        <div id="fornecedorData" style="display: none;">
-                             <div class="stats-grid">
-                                <div class="stat-card-dash"> <div class="stat-number" id="fornecedorMediaValor">R$ 0,00</div> <div class="stat-label">Valor Médio por Descarga</div> </div>
-                                <div class="stat-card-dash"> <div class="stat-number" id="fornecedorTotalDescargas">0</div> <div class="stat-label">Total de Descargas</div> </div>
-                                <div class="stat-card-dash"> <div class="stat-number" id="fornecedorTotalCobrado">R$ 0,00</div> <div class="stat-label">Valor Total Cobrado</div> </div>
-                                <div class="stat-card-dash"> <div class="stat-number" id="fornecedorTotalPendente">R$ 0,00</div> <div class="stat-label">Pagamentos Pendentes</div> </div>
-                            </div>
-                            
-                            <div class="chart-card">
-                                <h3><i data-feather="trending-up"></i> Evolução de Cobrança (R$)</h3>
-                                <div class="chart-container-wrapper" style="height: 350px;">
-                                    <canvas id="chartEvolucaoFornecedor"></canvas>
-                                </div>
-                            </div>
-                            
-                            <div class="info-card">
-                                 <h3><i data-feather="clipboard"></i> Histórico Detalhado do Fornecedor</h3>
-                                 <div id="fornecedorHistoricoContainer" class="table-container">
-                                     <!-- Tabela de histórico do fornecedor será inserida aqui -->
-                                 </div>
+                        <!-- Tabela de Recebimento (Colunas solicitadas) -->
+                        <div id="tabelaRecebimentoContainer" class="table-container">
+                            <div id="tabelaRecebimento">
+                                <table class="tabela">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Cód. Agenda</th>
+                                            <th>Fornecedor</th>
+                                            <th>Nota Emitida</th>
+                                            <th>CD</th>
+                                            <th>Ref. Nota</th>
+                                            <th>Tipo Descarga</th>
+                                            <th>Valor Cobrado</th>
+                                            <th>Tipo Pag.</th>
+                                            <th>Data Pag.</th>
+                                            <th>Pagador</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Mock Data (Exemplo) -->
+                                        <tr>
+                                            <td>05/11/2025</td>
+                                            <td>1001</td>
+                                            <td>ACME LTDA</td>
+                                            <td>123456</td>
+                                            <td>101</td>
+                                            <td>123456</td>
+                                            <td>CARGA PALETIZADA</td>
+                                            <td>R$ 150,00</td>
+                                            <td>PIX</td>
+                                            <td>06/11/2025</td>
+                                            <td>Filial 101</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-warning" onclick="window.GG.editarRecebimento(1)">
+                                                    <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>05/11/2025</td>
+                                            <td>1002</td>
+                                            <td>LOGISTICS S.A.</td>
+                                            <td>789001</td>
+                                            <td>205</td>
+                                            <td>789001, 789002</td>
+                                            <td>ESTIVADA VEÍCULOS MENORES</td>
+                                            <td>R$ 80,00</td>
+                                            <td>PENDENTE</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td class="actions">
+                                                <button class="btn btn-sm btn-warning" onclick="window.GG.editarRecebimento(2)">
+                                                    <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Fim Mock Data -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Conteúdo: Configurações (ABAS ATUALIZADAS) -->
+                    <!-- Conteúdo: Configurações (Ajustado) -->
                     <div id="configuracoesView" class="view-content">
                         <div id="accessStatusConfig" class="access-status" style="display: none;"></div>
-                        <h1><i class="fas fa-cogs"></i> Configurações do Sistema</h1>
+                        <h1><i data-feather="settings" class="text-blue-600"></i> Configurações do Sistema</h1>
                         
                         <div id="configAdminOnly" style="display: none;">
-                            <div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> Acesso restrito a administradores.</div>
+                            <div class="alert alert-warning"><i data-feather="alert-triangle" class="h-4 w-4 mr-2"></i> Acesso restrito a administradores.</div>
                             
+                            <!-- Abas de Configuração Atualizadas -->
                             <div class="config-tabs">
-                                <button class="config-tab-item active" onclick="window.CR.showConfigTab('usuarios', this)">
+                                <button class="config-tab-item active" onclick="window.GG.showConfigTab('tabelaDescarga', this)">
+                                    <i data-feather="dollar-sign"></i> Tabela de Descarga
+                                </button>
+                                <button class="config-tab-item" onclick="window.GG.showConfigTab('chavesPix', this)">
+                                    <i data-feather="key"></i> Chaves PIX (Filiais)
+                                </button>
+                                <button class="config-tab-item" onclick="window.GG.showConfigTab('usuarios', this)">
                                     <i data-feather="users"></i> Gerenciar Usuários
-                                </button>
-                                <button class="config-tab-item" onclick="window.CR.showConfigTab('valores', this)">
-                                    <i data-feather="dollar-sign"></i> Valores de Descarga
-                                </button>
-                                <button class="config-tab-item" onclick="window.CR.showConfigTab('filiais', this)">
-                                    <i data-feather="map-pin"></i> Filiais (Chave PIX)
-                                </button>
-                                <button class="config-tab-item" onclick="window.CR.showConfigTab('fornecedores', this)">
-                                    <i data-feather="briefcase"></i> Cadastro Fornecedores
                                 </button>
                             </div>
                             
-                            <!-- ABA 1: GERENCIAR USUÁRIOS (Sem alteração) -->
-                            <div id="configTabUsuarios" class="config-tab-content active">
+                            <!-- ABA 1: TABELA DE DESCARGA (Nova) -->
+                            <div id="configTabTabelaDescarga" class="config-tab-content active">
+                                <div class="info-card">
+                                    <h3><i data-feather="edit" class="h-5 w-5"></i> Gerenciar Tabela de Valores de Descarga</h3>
+                                    <p class="mb-4 text-sm text-gray-600">
+                                        Estes são os valores padrão que serão usados no cálculo do "Valor Cobrado" no recebimento.
+                                    </p>
+                                    <div class="table-container">
+                                        <table class="tabela" id="tabela-descarga-valores">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tipo de Serviço (Grupo)</th>
+                                                    <th>Descrição do Serviço</th>
+                                                    <th>Valor (Unidade)</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Mock Data (baseado na Imagem 1) -->
+                                                <tr>
+                                                    <td>CARGA PALETIZADA</td>
+                                                    <td>Descarga com empilhadeira Elétrica</td>
+                                                    <td>R$ 14,00</td>
+                                                    <td class="actions">
+                                                        <button class="btn btn-sm btn-warning" onclick="window.GG.abrirModalEdicaoValor(1)">
+                                                            <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>CARGA PALETIZADA</td>
+                                                    <td>Descarga com empilhadeira Gás</td>
+                                                    <td>R$ 20,00</td>
+                                                    <td class="actions">
+                                                        <button class="btn btn-sm btn-warning" onclick="window.GG.abrirModalEdicaoValor(2)">
+                                                            <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>CARGA RETRABALHADA</td>
+                                                    <td>Descarga pallet retrabalhado</td>
+                                                    <td>R$ 17,50</td>
+                                                    <td class="actions">
+                                                        <button class="btn btn-sm btn-warning" onclick="window.GG.abrirModalEdicaoValor(3)">
+                                                            <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td>ESTIVADA VEÍCULOS MAIORES</td>
+                                                    <td>Descarga volume batido</td>
+                                                    <td>R$ 0,15</td>
+                                                    <td class="actions">
+                                                        <button class="btn btn-sm btn-warning" onclick="window.GG.abrirModalEdicaoValor(4)">
+                                                            <i data-feather="edit-2" class="h-4 w-4"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <!-- etc. -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- ABA 2: CHAVES PIX (Nova) -->
+                            <div id="configTabChavesPix" class="config-tab-content">
+                                <div class="info-card">
+                                    <h3><i data-feather="plus-circle"></i> Cadastrar Chave PIX por Filial</h3>
+                                    <form id="form-add-pix" onsubmit="event.preventDefault(); window.GG.salvarChavePix();">
+                                        <input type="hidden" id="edit-pix-id">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="add-pix-filial">Filial (CD) *</label>
+                                                <select id="add-pix-filial" required>
+                                                    <option value="">Selecione...</option>
+                                                    <option value="101">Filial 101</option>
+                                                    <option value="205">Filial 205</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add-pix-tipo">Tipo de Chave *</label>
+                                                <select id="add-pix-tipo" required>
+                                                    <option value="">Selecione...</option>
+                                                    <option value="CNPJ">CNPJ</option>
+                                                    <option value="Email">Email</option>
+                                                    <option value="Telefone">Telefone</option>
+                                                    <option value="Aleatoria">Aleatória</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add-pix-chave">Chave PIX *</label>
+                                            <input type="text" id="add-pix-chave" required placeholder="Digite a chave PIX...">
+                                        </div>
+                                        <button type="submit" class="btn btn-success"><i data-feather="save" class="h-4 w-4 mr-2"></i> Salvar Chave</button>
+                                        <button type="button" class="btn btn-secondary" onclick="window.GG.limparFormPix()"><i data-feather="x" class="h-4 w-4 mr-2"></i> Limpar</button>
+                                    </form>
+                                    <hr>
+                                    <h4>Chaves Cadastradas</h4>
+                                    <div class="table-container">
+                                        <table class="tabela" id="tabela-pix">
+                                            <thead><tr><th>Filial (CD)</th><th>Tipo</th><th>Chave PIX</th><th>Ações</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>101</td>
+                                                    <td>CNPJ</td>
+                                                    <td>00.744.3b4-085e...</td>
+                                                    <td class="actions">
+                                                        <button class="btn btn-sm btn-danger" onclick="window.GG.excluirChavePix(1)"><i data-feather="trash-2" class="h-4 w-4"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- ABA 3: GERENCIAR USUÁRIOS (Mantida) -->
+                            <div id="configTabUsuarios" class="config-tab-content">
+                                <!-- O conteúdo desta aba foi mantido do seu app.html original -->
                                 <div class="info-card">
                                     <h3><i data-feather="user-plus"></i> Solicitações de Acesso Pendentes</h3>
                                     <div class="table-container">
@@ -393,6 +492,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                
                                 <div class="info-card">
                                     <h3><i data-feather="users"></i> Gerenciar Usuários do Sistema</h3>
                                     <div class="table-container">
@@ -404,113 +504,6 @@
                                 </div>
                             </div>
                             
-                            <!-- ABA 2: GERENCIAR VALORES DE DESCARGA (NOVA) -->
-                            <div id="configTabValores" class="config-tab-content">
-                                <div class="info-card">
-                                    <h3><i class="fas fa-plus-circle"></i> Cadastrar Valor de Descarga</h3>
-                                    <form id="form-add-valor" onsubmit="event.preventDefault(); window.CR.salvarValorDescarga();">
-                                        <input type="hidden" id="edit-valor-id">
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="add-valor-tipo">Tipo de Serviço * (Ex: CARGA PALETIZADA)</label>
-                                                <input type="text" id="add-valor-tipo" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add-valor-descricao">Descrição * (Ex: Descarga com empilhadeira)</label>
-                                                <input type="text" id="add-valor-descricao" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add-valor-valor">Valor (R$) *</label>
-                                                <input type="number" id="add-valor-valor" required step="0.01" placeholder="14.00">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Valor</button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.CR.limparFormValor()"><i class="fas fa-undo"></i> Limpar</button>
-                                    </form>
-                                    <hr>
-                                    <div class="flex justify-between items-center">
-                                        <h4>Tabela de Preços Ativa</h4>
-                                        <a href="tabela_descarga.html" target="_blank" class="btn btn-info btn-sm">
-                                            <i data-feather="printer" class="h-4 w-4 mr-2"></i> Ver/Imprimir Tabela
-                                        </a>
-                                    </div>
-                                    <div class="table-container">
-                                        <table class="tabela" id="tabela-valores">
-                                            <thead><tr><th>Tipo de Serviço</th><th>Descrição</th><th>Valor (R$)</th><th>Ações</th></tr></thead>
-                                            <tbody><tr><td colspan="4" style="text-align:center;">Carregando...</td></tr></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- ABA 3: GERENCIAR FILIAIS (PIX) (NOVA) -->
-                            <div id="configTabFiliais" class="config-tab-content">
-                                <div class="info-card">
-                                    <h3><i data-feather="map-pin"></i> Gerenciar Filiais e Chave PIX</h3>
-                                    <p class="mb-4 text-sm text-gray-600">Cadastre as filiais (CDs) e a Chave PIX associada a cada uma para a impressão da tabela de preços.</p>
-                                    <form id="form-add-filial" onsubmit="event.preventDefault(); window.CR.salvarFilial();">
-                                        <input type="hidden" id="edit-filial-id">
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="add-filial-nome">Nome da Filial / CD *</label>
-                                                <input type="text" id="add-filial-nome" required placeholder="Ex: 101 - CUIABÁ">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add-filial-pix">Chave PIX (CNPJ ou outra)</label>
-                                                <input type="text" id="add-filial-pix" placeholder="00.000.000/0001-00">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Filial</button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.CR.limparFormFilial()"><i class="fas fa-undo"></i> Limpar</button>
-                                    </form>
-                                    <hr>
-                                    <h4>Filiais Cadastradas</h4>
-                                    <div class="table-container">
-                                        <table class="tabela" id="tabela-filiais">
-                                            <thead><tr><th>Nome Filial / CD</th><th>Chave PIX</th><th>Ações</th></tr></thead>
-                                            <tbody><tr><td colspan="3" style="text-align:center;">Carregando...</td></tr></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- ABA 4: GERENCIAR FORNECEDORES (NOVA) -->
-                            <div id="configTabFornecedores" class="config-tab-content">
-                                <div class="info-card">
-                                    <h3><i data-feather="briefcase"></i> Cadastro de Fornecedores</h3>
-                                    <p class="mb-4 text-sm text-gray-600">Gerencie o cadastro de fornecedores para auto-completar.</p>
-                                    <form id="form-add-fornecedor" onsubmit="event.preventDefault(); window.CR.salvarFornecedor();">
-                                        <input type="hidden" id="edit-fornecedor-id">
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label for="add-fornecedor-nome">Nome do Fornecedor *</label>
-                                                <input type="text" id="add-fornecedor-nome" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add-fornecedor-cnpj">CNPJ (Opcional)</label>
-                                                <input type="text" id="add-fornecedor-cnpj">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add-fornecedor-status">Status</label>
-                                                <select id="add-fornecedor-status">
-                                                    <option value="ativo">Ativo</option>
-                                                    <option value="inativo">Inativo</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar Fornecedor</button>
-                                        <button type="button" class="btn btn-secondary" onclick="window.CR.limparFormFornecedor()"><i class="fas fa-undo"></i> Limpar</button>
-                                    </form>
-                                    <hr>
-                                    <h4>Fornecedores Cadastrados</h4>
-                                    <div class="table-container">
-                                        <table class="tabela" id="tabela-fornecedores">
-                                            <thead><tr><th>Nome</th><th>CNPJ</th><th>Status</th><th>Ações</th></tr></thead>
-                                            <tbody><tr><td colspan="4" style="text-align:center;">Carregando...</td></tr></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                          
                          <div id="configUserOnly" class="alert alert-info" style="display: none;">
@@ -518,18 +511,18 @@
                         </div>
                     </div>
                     
-                    <!-- Conteúdo: Perfil (Sem alteração) -->
+                    <!-- Conteúdo: Perfil (Mantido) -->
                     <div id="perfilView" class="view-content">
-                         <h1><i class="fas fa-user-circle"></i> Meu Perfil</h1>
+                         <h1><i data-feather="user" class="text-blue-600"></i> Meu Perfil</h1>
                         <div class="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto info-card">
-                            <form id="perfilForm" onsubmit="event.preventDefault(); window.CR.handlePerfilFormSubmit();">
+                            <form id="perfilForm" onsubmit="event.preventDefault(); window.GG.handlePerfilFormSubmit();">
                                 <div class="flex flex-col sm:flex-row items-center mb-6 pb-6 border-b">
                                     <img id="perfilPicturePreview" src="https://i.imgur.com/80SsE11.png" alt="Foto Perfil" class="w-24 h-24 rounded-full object-cover mb-4 sm:mb-0 sm:mr-6 border border-gray-200 shadow-sm">
                                     <div class="text-center sm:text-left">
                                         <label for="perfilPicture" class="btn btn-primary btn-small cursor-pointer">
                                             <i data-feather="upload" class="h-4 w-4 mr-2"></i> Alterar Foto
                                         </label>
-                                        <input type="file" id="perfilPicture" accept="image/jpeg, image/png, image/gif" class="hidden" onchange="window.CR.previewProfilePicture(event)">
+                                        <input type="file" id="perfilPicture" accept="image/jpeg, image/png, image/gif" class="hidden" onchange="window.GG.previewProfilePicture(event)">
                                         <p class="text-xs text-gray-500 mt-2">Envie JPG, PNG ou GIF (Máx 2MB).</p>
                                     </div>
                                 </div>
@@ -562,33 +555,34 @@
         </div>
     </div>
 
-    <!-- Container de Notificações -->
+    <!-- Container de Notificações (Mantido) -->
     <div id="notificationContainer"></div>
     
-    <!-- Tela de Loading -->
+    <!-- Tela de Loading (Mantida) -->
      <div class="loading" id="loading"><div class="spinner"></div><p>Processando...</p></div>
     
-     <!-- Modal Genérico (Mantido para compatibilidade) -->
+     <!-- Modal Genérico (Mantido - Útil para editar Tabela de Descarga, PIX, etc.) -->
      <div id="editModal" class="modal">
        <div class="modal-content">
-        <span class="modal-close" onclick="window.CR.fecharModal()">&times;</span>
+        <span class="modal-close" onclick="window.GG.fecharModal()">&times;</span>
         <h3 id="modalTitle">Editar Item</h3>
-        <form id="modalForm" onsubmit="event.preventDefault(); window.CR.salvarEdicaoModal();">
+        <form id="modalForm" onsubmit="event.preventDefault(); window.GG.salvarEdicaoModal();">
             <input type="hidden" id="editItemId">
             <input type="hidden" id="editItemType">
+            <!-- Campos do modal genérico serão preenchidos pelo JS -->
             <div id="modalFields"></div>
             <button type="submit" class="btn btn-success">Salvar Alterações</button>
-            <button type="button" class="btn btn-secondary" onclick="window.CR.fecharModal()">Cancelar</button>
+            <button type="button" class="btn btn-secondary" onclick="window.GG.fecharModal()">Cancelar</button>
         </form>
        </div>
      </div>
      
-     <!-- Modal de Edição de Usuário (Mantido) -->
+     <!-- Modal de Edição de Usuário (Mantido - Usado pela aba Configurações -> Usuários) -->
      <div id="userEditModal" class="modal">
        <div class="modal-content" style="width: 600px; max-width: 95vw;">
-        <span class="modal-close" onclick="window.CR.fecharModalUsuario()">&times;</span>
+        <span class="modal-close" onclick="window.GG.fecharModalUsuario()">&times;</span>
         <h3>Editar Usuário</h3>
-        <form id="userEditForm" onsubmit="event.preventDefault(); window.CR.salvarModalUsuario();">
+        <form id="userEditForm" onsubmit="event.preventDefault(); window.GG.salvarModalUsuario();">
             <input type="hidden" id="modal-user-id">
             <div class="form-row">
                 <div class="form-group">
@@ -606,7 +600,7 @@
                     <input type="text" id="modal-user-matricula">
                 </div>
                 <div class="form-group">
-                    <label for="modal-user-filial">Filial Principal</label>
+                    <label for="modal-user-filial">Filial Principal (Legado)</label>
                     <input type="text" id="modal-user-filial" placeholder="Ex: 101, 205...">
                 </div>
             </div>
@@ -631,7 +625,7 @@
                 <button type="submit" class="btn btn-success">
                     <i data-feather="save" class="h-4 w-4 mr-2"></i> Salvar
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="window.CR.fecharModalUsuario()">
+                <button type="button" class="btn btn-secondary" onclick="window.GG.fecharModalUsuario()">
                     Cancelar
                 </button>
             </div>
@@ -639,9 +633,10 @@
        </div>
      </div>
 
-     <!-- Modal de Edição de Pessoal (REMOVIDO, agora é Fornecedor na config) -->
-     
-    <!-- ATUALIZADO: Carrega o novo script -->
+     <!-- O Modal 'pessoalEditModal' foi removido pois a aba 'Pessoal' foi removida -->
+
+
+    <!-- O script.js original será carregado, mas precisará de ajustes -->
     <script src="script.js"></script>
     <script>
         feather.replace();
